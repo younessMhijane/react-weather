@@ -10,6 +10,8 @@ import tornado from './weatherSession/Tornado.jpg'
 import mist from './weatherSession/fog.webp'
 import sand from './weatherSession/sand.jpg'
 import LocalImage from './iconImg/broche-de-localisation.png'
+import DateComponent from './Components/Date';
+import WeekWeather from './Components/WeekWeather'
 function App() {
   const api = {
     key: "f0e165f53686c85d1e383b383d1614e0",
@@ -21,6 +23,7 @@ function App() {
   const [weather, setWeather] = useState({});
   const [error, setError] = useState("");
   const [imgSession, setImgSession] = useState("");
+  const [clickSearch, setclickSearch] = useState(false);
 
   useEffect(() => {
     const selectSessionImg = () => {
@@ -62,7 +65,7 @@ function App() {
             const { latitude, longitude } = position.coords;
             const response = await fetch(
               `https://geocode.xyz/${latitude},${longitude}?geoit=json`
-            )
+            );
             const data = await response.json();
             if (data.city) {
               setDefaultCity(data.osmtags.name_fr);
@@ -92,11 +95,12 @@ function App() {
           } else {
             setWeather(result);
             setError("");
+            setclickSearch(true)
           }
         })
         .catch(() => setError("Erreur lors de la récupération des données."));
     }
-  }, [defaultCity]);
+  }, [defaultCity, api.base, api.key]);
 
   // Recherche météo manuelle
   const searchWeather = (e) => {
@@ -105,27 +109,22 @@ function App() {
         .then((res) => res.json())
         .then((result) => {
           if (result.cod !== 200) {
-            setError(result.message);
+            if(result.message==="city not found"){
+              setError("Ville Introuvable");
+            }else{
+              setError(result.message);
+            }
           } else {
             console.log(result)
             setWeather(result);
             setError("");
+            setclickSearch(true)
           }
         })
         .catch(() => setError("Erreur lors de la récupération des données."));
     }
   };
-  const getFormattedDayAndDate = () => {
-    const today = new Date();
-    const day = today.toLocaleDateString("fr-FR", { weekday: "long" });
-    const date = today.toLocaleDateString("fr-FR", {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    }); 
-    return { day, date };
-  };
-  const { day, date } = getFormattedDayAndDate();
+
   return (
     <div className="App" style={{
       backgroundImage: `url(${imgSession})`,
@@ -133,8 +132,10 @@ function App() {
       backgroundSize: "cover",
     }}>
       <div className="weather">
+      <div className="weather-top">
+
       <div className='weather-1'>
-      {(weather.name) ?
+      {(weather.name) && !error?
       <>
             <div style={{ 
                 backgroundImage:`url(https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png)`,
@@ -156,27 +157,31 @@ function App() {
           className="weather-input"
           type="text"
           placeholder="Entrez une ville"
-          onChange={(e) => setCity(e.target.value)}
+          onChange={(e) => {setCity(e.target.value); setclickSearch(false)}}
           value={city}
           onKeyDown={searchWeather}
         />
         {error && <p className="error">{error}</p>}
         {weather.main && !error && (
           <div>
-            <p>{weather.weather[0].description}</p>
+            <p>{weather.weather[0].description} <span>(min: {weather.main.temp_min} ,max: {weather.main.temp_max})</span></p>
           </div>
         )}
-        <p className='Date'>{day}, {date}</p>
+        <DateComponent/>
       </div>
 
       <div className='weather-3'>
-      {(weather.name) ?
+      {(weather.name) && !error ?
       <>
-        <img src={LocalImage}></img>
+        <img src={LocalImage} alt='LocalImage'></img>
         <h6> {weather.name}</h6>
       </>
         : ""
       }
+      </div>
+      </div>
+      <div className='WeekWeather'>
+        <WeekWeather clickSearch={clickSearch} city={city} api={api}/>
       </div>
       </div>
 

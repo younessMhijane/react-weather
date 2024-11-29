@@ -1,0 +1,53 @@
+.week-weather {
+    padding: 2%;
+  }
+  
+  .forecast-grid {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    overflow-x: scroll;
+    border-top: 2px dotted gray;
+    padding-top:5px ;
+
+  }
+  .forecast-grid::-webkit-scrollbar {
+    width: 5px;
+  }
+  
+  .forecast-item {
+    display: inline;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.219);
+    border-radius: 8px;
+    width: 90%;
+    padding: 5px;
+    min-height: 127px;
+  }
+  
+  .forecast-item img {
+    width: 70px;
+    height: auto;
+  }
+  .forecast-item .Jour {
+    display: flex;
+    justify-content: center;
+    padding-top:5px ;
+    font-size: medium;
+    font-style: oblique;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  }
+  .forecast-item .temperature {
+    margin: 0;
+    font-weight: bold;
+    font-size: medium;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  }
+  
+  .forecast-item .weathermain {
+    margin: 0;
+    font-weight: bold;
+    font-size: small;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  }
+  
