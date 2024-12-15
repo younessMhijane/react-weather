@@ -13,10 +13,11 @@ import LocalImage from './iconImg/broche-de-localisation.png'
 import DateComponent from './Components/Date';
 import WeekWeather from './Components/WeekWeather'
 function App() {
+  
   const api = {
-    key: "f0e165f53686c85d1e383b383d1614e0",
-    base: "https://api.openweathermap.org/data/2.5/",
-  };
+    key: process.env.REACT_APP_API_KEY,
+    base: process.env.REACT_APP_API_BASE,
+  };  
 
   const [defaultCity, setDefaultCity] = useState("");
   const [city, setCity] = useState("");

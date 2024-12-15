@@ -37,7 +37,7 @@ const WeekWeather = ({clickSearch, city, api }) => {
           {forecast.length > 0 && (
             <div className="forecast-grid">
               {forecast
-                .filter((_, index) => index % 8 === 0) // Filter to show daily data
+                .filter((_, index) => index % 8 === 0) //forecast contient des données toutes les 3 heures (8 entrées par jour)
                 .map((day, index) => (
                   <div key={index} className="forecast-item">
                     <div className='Jour'>{getDayOfWeek(day.dt)} |<p className='temperature'>{Math.round(day.main.temp)}°C</p> |</div>
